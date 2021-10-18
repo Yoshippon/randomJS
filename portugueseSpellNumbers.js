@@ -41,17 +41,33 @@ const getHundredthsPart = (num) => {
 
   const numArray = Array.from(String(num)).reverse();
 
-  const [un, dz] = numArray.map(Number);
+  const [un, dz, hu, ...ths] = numArray;
+
+  const thsStr = ths[0] ? Number(ths.reverse().join("")) : "";
+
+  const thousBase = thsStr ? `${getHundredthsPart(thsStr)} mil ` : "";
 
   const getFromBase = (pos, i) => (pos ? baseStrings[pos][i] : "");
 
-  const [unStr, dzStr, huStr] = numArray.map(Number).map(getFromBase);
+  const [unStr, dzStr, huBase] = numArray.map(Number).map(getFromBase);
 
-  const edgeDozens = edgeCases[String(dz) + String(un)];
+  const appendE = thousBase && Number(hu) ? false : Number(dz) || Number(un);
 
-  const dozens = dz === 1 ? edgeDozens : `${dzStr}${dz ? " " : ""}${unStr}`;
+  const thousandsStr = thousBase && appendE ? `${thousBase} e ` : thousBase;
 
-  return `${huStr || ""} ${dozens}`.trim().replace(new RegExp(" ", "g"), " e ");
+  const huStr = thousandsStr && hu === "1" ? "cento" : huBase;
+
+  const edgeDzs = edgeCases[String(dz) + String(un)];
+
+  const dozensStr = dz === "1" ? edgeDzs : `${dzStr}${dz ? " " : ""}${unStr}`;
+
+  const hundredsStr = `${huStr || ""} ${dozensStr}`;
+
+  const clean = (str) => str.trim().replace(new RegExp(" ", "g"), " e ");
+
+  const result = `${thousandsStr}${clean(hundredsStr)}`;
+
+  return result;
 };
 
 const results = [
@@ -59,13 +75,23 @@ const results = [
   getHundredthsPart(10),
   getHundredthsPart(18),
   getHundredthsPart(22),
+  getHundredthsPart(101),
   getHundredthsPart(311),
   getHundredthsPart(702),
   getHundredthsPart(455),
   getHundredthsPart(12),
+  getHundredthsPart(150),
+  getHundredthsPart(1000),
+  getHundredthsPart(1001),
+  getHundredthsPart(2000),
+  getHundredthsPart(3022),
+  getHundredthsPart(3222),
+  getHundredthsPart(4122),
+  getHundredthsPart(40122),
+  getHundredthsPart(150122),
 ];
 
-const [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10] = results;
+const [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13] = results;
 
 t0;
 t1;
@@ -76,3 +102,7 @@ t5;
 t6;
 t7;
 t8;
+t9;
+t10;
+t11;
+t13;
